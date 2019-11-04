@@ -1,6 +1,6 @@
 using LightGraphs
 
-#cd("C:\\Users\\Dyoz\\ownCloud\\Julia\\Temporal Networks")
+#cd("F:\\temporal networks")
 cd("C:\\Users\\Cedric\\ownCloud\\Julia\\Temporal Networks")
 
 struct Contact
