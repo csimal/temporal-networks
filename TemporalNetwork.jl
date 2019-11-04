@@ -1,10 +1,7 @@
 using LightGraphs
 
-#cd("F:\\temporal networks")
-cd("C:\\Users\\Cedric\\ownCloud\\Julia\\Temporal Networks")
-
 struct Contact
-     time::Int,
+     time::Integer
      edge::Edge
 end
 
@@ -12,7 +9,7 @@ struct TemporalEdgeList
     edges::Vector{Contact}
 end # struct
 
-function snapshot(network::TemporalEdgeList, time::Int)
+function snapshot(network::TemporalEdgeList, time::Integer)
     edges = [e for (t,e) in network.edges if t==time]
     return SimpleGraph(edges)
 end
@@ -27,15 +24,5 @@ function snapshots(network::TemporalEdgeList)
 end
 
 function aggregate_network(tnet::TemporalEdgeList)
-    return SimpleGraphFromIterator(map(edge, tnet.edges))
+    return SimpleGraphFromIterator(map(c->c.edge, tnet.edges))
 end
-
-f = open("ht09_contact_list.dat")
-
-edges = Vector{Contact}()
-for ln in eachline(f)
-    vals = map(s->parse(Int,s), split(ln))
-    push!(edges, (vals[1]÷20, Edge(vals[2],vals[3])))
-end
-
-tnet = TemporalEdgeList(edges)
