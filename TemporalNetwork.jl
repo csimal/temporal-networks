@@ -1,0 +1,41 @@
+using LightGraphs
+
+#cd("C:\\Users\\Dyoz\\ownCloud\\Julia\\Temporal Networks")
+cd("C:\\Users\\Cedric\\ownCloud\\Julia\\Temporal Networks")
+
+struct Contact
+     time::Int,
+     edge::Edge
+end
+
+struct TemporalEdgeList
+    edges::Vector{Contact}
+end # struct
+
+function snapshot(network::TemporalEdgeList, time::Int)
+    edges = [e for (t,e) in network.edges if t==time]
+    return SimpleGraph(edges)
+end
+
+function snapshots(network::TemporalEdgeList)
+    size = maximum(first, network.edges)
+    networks = Vector{SimpleGraph}
+    for t in 1:size
+        networks[t] = snapshot(network, t)
+    end
+    return networks
+end
+
+function aggregate_network(tnet::TemporalEdgeList)
+    return SimpleGraphFromIterator(map(edge, tnet.edges))
+end
+
+f = open("ht09_contact_list.dat")
+
+edges = Vector{Contact}()
+for ln in eachline(f)
+    vals = map(s->parse(Int,s), split(ln))
+    push!(edges, (vals[1]÷20, Edge(vals[2],vals[3])))
+end
+
+tnet = TemporalEdgeList(edges)
