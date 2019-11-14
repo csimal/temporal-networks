@@ -7,7 +7,12 @@ end
 
 struct TemporalEdgeList
     edges::Vector{Contact}
-end # struct
+end
+
+struct TemporalNetwork
+    snapshots::Vector{SimpleGraph}
+    timestamps::Vector{Real}
+end
 
 function snapshot(network::TemporalEdgeList, time::Integer)
     edges = [e for (t,e) in network.edges if t==time]
