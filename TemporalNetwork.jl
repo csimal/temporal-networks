@@ -10,7 +10,7 @@ struct TemporalEdgeList
 end
 
 struct TemporalNetwork
-    snapshots::Vector{SimpleGraph}
+    snapshots::Vector{AbstractSimpleGraph}
     timestamps::Vector{Real}
 end
 
