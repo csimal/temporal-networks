@@ -122,20 +122,20 @@ end
 function epidemic_step_ib(g::AbstractSimpleGraph, α::Real, β::Real, state)
     (s,i,r) = state # probability vectors for each possible epidemic state
     n = length(s)
-    s_new = Vector{Real}(0.0,n)
-    i_new = Vector{Real}(0.0,n)
-    r_new = Vector{Real}(0.0,n)
+    s_new = zeros(n)
+    i_new = zeros(n)
+    r_new = zeros(n)
     A = adjacency_matrix(g)
 
     for v in vertices(g)
-        s_new[v] = s[v]*prod(u->1-α*i(u) , filter(i->A[i,v]!=0.0, 1:n))
+        s_new[v] = s[v]*prod(u->1-α*i[u], filter(i->A[i,v]!=0.0, 1:n))
         i_new[v] = (1-β)*i[v] + s[v] - s_new[v]
         r_new[v] = 1 - s_new[v] - i_new[v]
     end
     return (s_new, i_new, r_new)
 end
 
-function epidemic_step_cb!(g::AbstractSimpleGraph, α::Real, β::Real, state)
+function epidemic_step_cb(g::AbstractSimpleGraph, α::Real, β::Real, state)
     (θ,s,i,r,z) = state # NB. the state is described here by edge quantities contained in square matrices
     n = size(θ,1)
     θ_new = spzeros(n,n) # empty sparse matrices
@@ -151,5 +151,5 @@ function epidemic_step_cb!(g::AbstractSimpleGraph, α::Real, β::Real, state)
     end
     i_new = (1-β)*(I-α*A).*i + s - s_new
     r_new = r + β*i
-    return θ_new, s_new, i_new, r_new, z
+    return θ_new, s_new, i_new, r_new, z # must pass z again for easy iteration
 end

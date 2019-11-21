@@ -1,4 +1,5 @@
 using LightGraphs
+using LightGraphs.SimpleGraphs
 
 struct Contact
      time::Integer
