@@ -65,13 +65,14 @@ function simulation_sir(g::AbstractSimpleGraph, α::Real, β::Real, state::Vecto
     return state_log, epidemic_log
 end
 
-function simulation_sir(g::TemporalNetwork, α::Real, β::Real, state::Vector{EpidemicState})
-    tmax = length(g.snapshots)
+function simulation_sir(g::AbstractTemporalNetwork, α::Real, β::Real, state::Vector{EpidemicState})
+    snaps = snapshots(g)
+    tmax = length(snaps)
     t = 0
     state_log = Vector()
     epidemic_log = Vector()
     while any(i->i==infected, state) && t+1 < tmax
-        (state,events) = epidemic_step_sir(g.snapshots[t+1], α, β, state, t)
+        (state,events) = epidemic_step_sir(snaps[t+1], α, β, state, t)
         push!(state_log, state)
         append!(epidemic_log, events)
         t += 1
@@ -178,9 +179,10 @@ function simulation_ib(g::AbstractSimpleGraph, α::Real, β::Real, state, tmax::
     return s_ib, i_ib, r_ib
 end
 
-function simulation_ib(g::TemporalNetwork, α::Real, β::Real, state, tmax::Integer)
+function simulation_ib(g::AbstractTemporalNetwork, α::Real, β::Real, state, tmax::Integer)
     n = length(state[1])
-    tmax = max(tmax, length(g.snapshots))
+    snaps = snapshots(g)
+    tmax = max(tmax, length(snaps))
     s, i, r = state
     s_ib = zeros(tmax+1, n)
     i_ib = zeros(tmax+1, n)

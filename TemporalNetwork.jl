@@ -6,11 +6,13 @@ struct Contact
      edge::Edge
 end
 
-struct TemporalEdgeList
+abstract type AbstractTemporalNetwork end
+
+struct TemporalEdgeList <: AbstractTemporalNetwork
     edges::Vector{Contact}
 end
 
-struct TemporalNetwork
+struct TemporalNetwork <: AbstractTemporalNetwork
     snapshots::Vector{AbstractSimpleGraph}
     timestamps::Vector{Real}
 end
@@ -28,6 +30,8 @@ function snapshots(network::TemporalEdgeList)
     end
     return networks
 end
+
+function snapshots(g::TemporalNetwork) = g.snapshots
 
 function aggregate_network(tnet::TemporalEdgeList)
     return SimpleGraphFromIterator(map(c->c.edge, tnet.edges))
