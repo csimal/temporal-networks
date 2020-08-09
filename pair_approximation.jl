@@ -117,6 +117,7 @@ function pair_approximation(g::SnapshotList, β, γ, x0; tmax=100.0, saveat=[])
         end
     end
     prob = ODEProblem(f!, u₀, (0.0, tmax))
+    #sol = solve(prob, TRBDF2(autodiff=false), saveat=saveat, tstops=g.timestamps)
     sol = solve(prob, Tsit5(), saveat=saveat, tstops=g.timestamps)
     S = Array{Float64,2}(undef, length(sol.t), N)
     I = Array{Float64,2}(undef, length(sol.t), N)

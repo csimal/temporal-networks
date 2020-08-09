@@ -109,11 +109,9 @@ function contact_based_discrete(g::SnapshotList, β::Real, γ::Real, x0, tmax::I
     S = Array{Float64,2}(undef, tmax+1, N)
     I = Array{Float64,2}(undef, tmax+1, N)
     R = Array{Float64,2}(undef, tmax+1, N)
-    for k in 1:N
-        S[1,k] = z[k]
-        I[1,k] = 1.0-z[k]
-        R[1,k] = 0.0
-    end
+    @. S[1,:] = z
+    @. I[1,:] = 1.0-z
+    @. R[1,:] = 0.0
     for e in 1:L
         (k,l) = links[e]
         idx[k,l] = e

@@ -16,6 +16,11 @@ struct ContactList <: AbstractTemporalNetwork
     nv::Int
 end
 
+struct SnapshotList <: AbstractTemporalNetwork
+    snapshots::Vector{SimpleGraph}
+    timestamps::Vector{Float64}
+end
+
 function ContactList(xs::Vector{Contact})
     max = 0
     for x in xs
@@ -63,11 +68,6 @@ function neighborhoods(g::SnapshotList)
         end
     end
     return out
-end
-
-struct SnapshotList <: AbstractTemporalNetwork
-    snapshots::Vector{SimpleGraph}
-    timestamps::Vector{Float64}
 end
 
 function snapshot(g::ContactList, tlb::Real, tub::Real)
