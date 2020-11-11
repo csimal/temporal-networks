@@ -1,5 +1,6 @@
 using LightGraphs
 using LightGraphs.SimpleGraphs
+using DataStructures
 
 include("utils.jl")
 
